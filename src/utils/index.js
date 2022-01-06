@@ -1,10 +1,13 @@
 const fs = require("fs")
 
-const addMovie = (movieArray, movieObj) => {
+// const addMovie = (movieArray, movieObj) => {
+    const addMovie = async (collection, movieObj) => {
     try {
-        movieArray.push(movieObj);
-        const stringyObj = JSON.stringify(movieArray);
-        fs.writeFileSync("./storage.json", stringyObj);
+        await collection.insertOne(movieObj)
+        console.log(`Successfully added ${movieObj.title}.`)
+        // movieArray.push(movieObj);
+        // const stringyObj = JSON.stringify(movieArray);
+        // fs.writeFileSync("./storage.json", stringyObj);
     } catch (error) {
         console.log(error);
     }
@@ -66,3 +69,4 @@ const addMovie = (movieArray, movieObj) => {
         listItems
 
     }
+
