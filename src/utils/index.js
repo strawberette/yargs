@@ -1,10 +1,15 @@
-const fs = require("fs")
+const fs = require("fs");
+const Movie = require("../modules/modules");
 
 // const addMovie = (movieArray, movieObj) => {
-    const addMovie = async (collection, movieObj) => {
+    const addMovie = async ( movieObj) => {
     try {
-        await collection.insertOne(movieObj)
-        console.log(`Successfully added ${movieObj.title}.`)
+        const newMovie = new Movie(movieObj)
+        console.log(newMovie)
+        await newMovie.save();
+        console.log("new movie", newMovie)
+        // await collection.insertOne(movieObj)
+        // console.log(`Successfully added ${movieObj.title}.`)
         // movieArray.push(movieObj);
         // const stringyObj = JSON.stringify(movieArray);
         // fs.writeFileSync("./storage.json", stringyObj);
