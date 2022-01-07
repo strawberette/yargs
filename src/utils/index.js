@@ -21,41 +21,60 @@ const fs = require("fs")
          console.log(error)
      }
  }
- const deleteItem = (movieArray, title) => {
+//  const deleteItem = (movieArray, title) => {
+    const deleteItem = async (collection, movieObj) => {
     try {
-        movieArray = movieArray.filter(e => e.title !== title)
-        const stringyObj = JSON.stringify(movieArray);
-        fs.writeFileSync("./storage.json", stringyObj);
+
+        await collection.deleteOne({title: movieObj.title})
+        console.log(`Successfully deleted ${movieObj}.`)
+
+        // movieArray = movieArray.filter(e => e.title !== title)
+        // const stringyObj = JSON.stringify(movieArray);
+        // fs.writeFileSync("./storage.json", stringyObj);
     } catch (error) {
         console.log(error);
     }
 
  }
 
- const editItem = (movieArray, title, newTitle) => {
+//  const editItem = (movieArray, title, newTitle) => {
+    const editItem = async (collection, movieObj, title) => {
+       
     try { 
-        movieArray.map((e, idx, arr) => {
-            if(e.title == title) {
-                return arr[idx].title = newTitle
-            }
-        }) 
-        const stringyObj = JSON.stringify(movieArray);
-        fs.writeFileSync("./storage.json", stringyObj);
+        // console.log(movieObj)
+        // return
+       await collection.findOneAndReplace({title: title}, movieObj)
+        console.log(`You have successfully edited your movie entry!`)
+
+        // movieArray.map((e, idx, arr) => {
+        //     if(e.title == title) {
+        //         return arr[idx].title = newTitle
+        //     }
+        // }) 
+        // const stringyObj = JSON.stringify(movieArray);
+        // fs.writeFileSync("./storage.json", stringyObj);
     } catch (error) {
         console.log(error);
     }
 
  }
 
- const listItems = (movieArray, title) => {
+//  const listItems = (movieArray, title) => {
+    const listItems = async (collection, movieObj) => {
     try { 
-        movieArray.map((e) => {
-            if(e.title == title) {
-                console.log(e)
-            }
-        }) 
-        const stringyObj = JSON.stringify(movieArray);
-        fs.writeFileSync("./storage.json", stringyObj);
+        const result = await collection.find({title: movieObj.title})
+        const arr =await result.toArray()
+        console.log(arr)
+
+
+
+        // movieArray.map((e) => {
+        //     if(e.title == title) {
+        //         console.log(e)
+        //     }
+        // }) 
+        // const stringyObj = JSON.stringify(movieArray);
+        // fs.writeFileSync("./storage.json", stringyObj);
     } catch (error) {
         console.log(error);
     }

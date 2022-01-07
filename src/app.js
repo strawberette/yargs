@@ -7,6 +7,7 @@ const connection = require("./db/connection.js");
 const command = process.argv[2]
 
 const app = async (args) => {
+    
     // try {
         // let movieArray;
         // try {
@@ -30,8 +31,12 @@ const app = async (args) => {
             
         }
         try {
-            if (process.argv[2] === "delete") {
-                deleteItem(movieArray, yargs.argv.title)
+            if (command == "delete") {
+               const movieObj = {title: args.title, actor: args.actor}
+                await connection(deleteItem, movieObj.title)
+
+            // if (process.argv[2] === "delete") {
+                // deleteItem(movieArray, yargs.argv.title)
             }
             
         } catch (error) {
@@ -39,16 +44,23 @@ const app = async (args) => {
             
         }
         try {
-            if (process.argv[2] === "edit") {
-                editItem(movieArray, yargs.argv.title, yargs.argv.newTitle)
+            if (command === "edit") {
+                const movieObj = {title: args.newTitle, actor: args.actor}    
+                           
+                await connection(editItem, movieObj, args.title)
+                // editItem(movieArray, yargs.argv.title, yargs.argv.newTitle)
             }
         } catch (error) {
             console.log(error)
         }
 
         try {
-            if (process.argv[2] === "show") {
-               listItems(movieArray, yargs.argv.title)
+            if (command == "show") {
+                const movieObj = {title: args.title, actor: args.actor}
+                 await connection(listItems, movieObj)
+
+            // if (process.argv[2] === "show") {
+            //    listItems(movieArray, yargs.argv.title)
             }
         } catch (error) {
             console.log(error)
