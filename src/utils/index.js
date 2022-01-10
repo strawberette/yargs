@@ -1,70 +1,62 @@
 const fs = require("fs");
-const Movie = require("../modules/modules");
+const Movie = require("../models/models");
+const mongoose = require("mongoose")
 
-// const addMovie = (movieArray, movieObj) => {
-    const addMovie = async ( movieObj) => {
+
+    const addMovie = async (movieObj) => {
     try {
         const newMovie = new Movie(movieObj)
-        console.log(newMovie)
+      
         await newMovie.save();
-        console.log("new movie", newMovie)
-        // await collection.insertOne(movieObj)
-        // console.log(`Successfully added ${movieObj.title}.`)
-        // movieArray.push(movieObj);
-        // const stringyObj = JSON.stringify(movieArray);
-        // fs.writeFileSync("./storage.json", stringyObj);
+        console.log(`You have successfully added your movie entry!`)
+        return
+
     } catch (error) {
         console.log(error);
+        return error
     }
  }
- const listMovies = () => {
-     try {
-        const movieArray = JSON.parse(fs.readFileSync("./storage.json"))
-        console.log(movieArray);
-         
-     } catch (error) {
-         console.log(error)
-     }
- }
-//  const deleteItem = (movieArray, title) => {
-    const deleteItem = async (collection, movieObj) => {
+ const listMovies = async() => {
     try {
+        console.log(await Movie.find({}))
 
-        await collection.deleteOne({title: movieObj.title})
-        console.log(`Successfully deleted ${movieObj}.`)
+    } catch (error) {
+        console.log(error)
+        
+    }
+  
+ }
 
-        // movieArray = movieArray.filter(e => e.title !== title)
-        // const stringyObj = JSON.stringify(movieArray);
-        // fs.writeFileSync("./storage.json", stringyObj);
+    const deleteItem = async (movieTitle) => {
+        try {
+            await Movie.deleteOne(movieTitle)
+            console.log(`You have successfully deleted this movie!`)
+        
     } catch (error) {
         console.log(error);
     }
 
  }
 
-//  const editItem = (movieArray, title, newTitle) => {
-    const editItem = async (collection, movieObj, title) => {
-       
+const editItem = async (props) => {
+            
+
     try { 
-        // console.log(movieObj)
-        // return
-       await collection.findOneAndReplace({title: title}, movieObj)
+        const movie = await Movie.updateOne(
+        {title : props.oldTitle},
+        {title : props.newTitle}
+        
+    )
+
+       
         console.log(`You have successfully edited your movie entry!`)
 
-        // movieArray.map((e, idx, arr) => {
-        //     if(e.title == title) {
-        //         return arr[idx].title = newTitle
-        //     }
-        // }) 
-        // const stringyObj = JSON.stringify(movieArray);
-        // fs.writeFileSync("./storage.json", stringyObj);
     } catch (error) {
         console.log(error);
     }
 
  }
 
-//  const listItems = (movieArray, title) => {
     const listItems = async (collection, movieObj) => {
     try { 
         const result = await collection.find({title: movieObj.title})
@@ -73,13 +65,7 @@ const Movie = require("../modules/modules");
 
 
 
-        // movieArray.map((e) => {
-        //     if(e.title == title) {
-        //         console.log(e)
-        //     }
-        // }) 
-        // const stringyObj = JSON.stringify(movieArray);
-        // fs.writeFileSync("./storage.json", stringyObj);
+
     } catch (error) {
         console.log(error);
     }
